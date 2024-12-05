@@ -8,9 +8,12 @@ load_dotenv()
 
 
 class Settings(BaseModel):
-    API_KEY: str = os.getenv("API_KEY")
-    url: str = "http://api.weatherapi.com/v1"
+    WEATHER_API_KEY: str = os.getenv("API_KEY")
+    WEATER_URL: str = "http://api.weatherapi.com/v1"
+    CURRENCY_API_KEY: str = os.getenv("CURENCY_API")
+    CURRENCY_URL: str = (
+        f"https://v6.exchangerate-api.com/v6/{CURRENCY_API_KEY}/latest/AZN"
+    )
 
 
 settings = Settings()
-print(settings.API_KEY)
