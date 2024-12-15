@@ -3,7 +3,7 @@ from fastapi.templating import Jinja2Templates
 from src.database.config import r as db_redis
 from src.home_page.utils import cache_data
 
-router = APIRouter(tags={"Home Page"})
+router = APIRouter(tags=["Home_Page"])
 templates = Jinja2Templates(directory="src/home_page/templates")
 
 
