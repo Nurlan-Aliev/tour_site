@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Request
 from fastapi.templating import Jinja2Templates
-from src.database.config import r as db_redis
+from database.config import r as db_redis
 from src.home_page.utils import cache_data
 
 router = APIRouter(tags=["Home_Page"])

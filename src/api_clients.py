@@ -1,24 +1,39 @@
 from src.settings import settings
-import aiohttp
-import asyncio
+from aiohttp import ClientSession
 
 
-async def get_api_data():
-    async with aiohttp.ClientSession() as session:
+CITY = "Baku"
+
+
+async def parse_weather(data: dict) -> dict:
+    return {
+        "name": data["location"]["name"],
+        "temp_c": data["current"]["temp_c"],
+        "temp_f": data["current"]["temp_f"],
+        "icon": data["current"]["condition"]["icon"],
+        "text": data["current"]["condition"]["text"],
+    }
+
+
+async def parse_currency(data: dict) -> dict:
+    return {
+        "AZN": data["conversion_rates"]["AZN"],
+        "RUB": data["conversion_rates"]["RUB"],
+        "USD": data["conversion_rates"]["USD"],
+        "EUR": data["conversion_rates"]["EUR"],
+        "CNY": data["conversion_rates"]["CNY"],
+    }
+
+
+async def get_api_data(session=ClientSession):
+    async with session() as session:
 
         async with session.get(
             f"{settings.WEATER_URL}/current.json",
-            params={"key": settings.WEATHER_API_KEY, "q": "Baku"},
+            params={"key": settings.WEATHER_API_KEY, "q": CITY},
         ) as response:
             weather = await response.json()
 
         async with session.get(f"{settings.CURRENCY_URL}") as response:
             currency = await response.json()
-
-    return weather, currency
-
-
-async def my_async_function():
-    while True:
-        await get_api_data()
-        await asyncio.sleep(60)
+    return await parse_weather(weather), await parse_currency(currency)
