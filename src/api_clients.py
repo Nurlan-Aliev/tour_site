@@ -1,4 +1,4 @@
-from src.settings import settings
+from settings import settings
 from aiohttp import ClientSession
 
 
@@ -29,11 +29,11 @@ async def get_api_data(session=ClientSession):
     async with session() as session:
 
         async with session.get(
-            f"{settings.WEATER_URL}/current.json",
+            f"{settings.WEATHER_URL}/current.json",
             params={"key": settings.WEATHER_API_KEY, "q": CITY},
         ) as response:
             weather = await response.json()
 
-        async with session.get(f"{settings.CURRENCY_URL}") as response:
+        async with session.get(settings.currency_url) as response:
             currency = await response.json()
     return await parse_weather(weather), await parse_currency(currency)
